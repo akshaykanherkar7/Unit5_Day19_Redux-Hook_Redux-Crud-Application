@@ -48,3 +48,15 @@ export const deleteSubTasks = (id, payload) => (dispatch) => {
       dispatch({ type: types.DELETE_SUBTASKS_FAILED, payload: e });
     });
 };
+
+export const addNewTaskAPI = (newTask) => (dispatch) => {
+  dispatch({ type: types.ADD_NEW_TASK_REQ });
+  return axios
+    .post("http://localhost:5000/tasks", newTask)
+    .then((res) => {
+      dispatch({ type: types.ADD_NEW_TASK_SUCCESS, payload: res.data });
+    })
+    .catch((e) => {
+      dispatch({ type: types.ADD_NEW_TASK_FAILED, payload: e });
+    });
+};

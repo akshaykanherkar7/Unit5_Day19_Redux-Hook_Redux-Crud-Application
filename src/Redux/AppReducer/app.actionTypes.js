@@ -13,3 +13,7 @@ export const ADD_SUBTASKS_FAILED = "add/subtask/fai";
 export const DELETE_SUBTASKS_REQ = "delete/subtask/req";
 export const DELETE_SUBTASKS_SUCCESS = "delete/subtask/suc";
 export const DELETE_SUBTASKS_FAILED = "delete/subtask/fai";
+
+export const ADD_NEW_TASK_REQ = "add/new/task/req";
+export const ADD_NEW_TASK_SUCCESS = "add/new/task/suc";
+export const ADD_NEW_TASK_FAILED = "add/new/task/fail";

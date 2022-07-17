@@ -12,10 +12,20 @@ import {
   RadioGroup,
   Stack,
   Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  FormLabel,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
+  addNewTaskAPI,
   addSubTasks,
   deleteSubTasks,
   getTasks,
@@ -25,6 +35,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { DeleteIcon } from "@chakra-ui/icons";
 
 const Editpage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const finalRef = React.useRef(null);
   const dispatch = useDispatch();
   const { id } = useParams();
   const { tasks } = useSelector((state) => state.appReducer);
@@ -35,6 +47,7 @@ const Editpage = () => {
   const [subTasks, setSubTasks] = useState([]);
   const [checkBox, setCheckBox] = useState([]);
   const [currentSubTasks, setCurrentSubTasks] = useState();
+  const [subTask1, setSubTask1] = useState("");
 
   const addSubTask = (e) => {
     e.preventDefault();
@@ -106,6 +119,27 @@ const Editpage = () => {
     dispatch(deleteSubTasks(id, { subTasks: newData })).then(() => {
       dispatch(getTasks());
     });
+  };
+
+  // setSubTasks1([...{ subTaskTitle: subTask1, status: false }]);
+
+  const handleAddNewTask = (e) => {
+    e.preventDefault();
+    const AddNewTasks = [{ subTaskTitle: subTask1, status: false }];
+    const newTaskTags = [...checkBox];
+
+    let newTask = {
+      title: taskTitle,
+      description: taskDescription,
+      task_status: taskStatus,
+      tags: newTaskTags,
+      subTasks: AddNewTasks,
+    };
+    dispatch(addNewTaskAPI(newTask)).then((res) => {
+      dispatch(getTasks());
+    });
+
+    onClose();
   };
 
   useEffect(() => {
@@ -234,7 +268,84 @@ const Editpage = () => {
           </Flex>
         </Box>
         {/* create new   */}
-        <Box border="1px solid black" width="250px" height="90vh"></Box>
+        <Box border="1px solid black" width="250px" height="90vh">
+          <Button
+            display="block"
+            bg="teal"
+            color="black"
+            m="auto"
+            mt={4}
+            onClick={onOpen}
+          >
+            Create A New Task
+          </Button>
+          <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Create A New Task</ModalHeader>
+              <ModalCloseButton />
+              <form onSubmit={handleAddNewTask}>
+                <ModalBody>
+                  {/* Body */}
+                  <FormLabel>Enter Title</FormLabel>
+                  <Input
+                    type="text"
+                    value={taskTitle}
+                    onChange={(e) => setTaskTitle(e.target.value)}
+                  />
+                  <FormLabel>Enter Desription</FormLabel>
+                  <Input
+                    type="text"
+                    value={taskDescription}
+                    onChange={(e) => setTaskDescription(e.target.value)}
+                  />
+                  <RadioGroup
+                    value={taskStatus}
+                    onChange={(value) => {
+                      setTaskStatus(value);
+                    }}
+                  >
+                    <FormLabel>Select Task Status</FormLabel>
+                    <Stack direction="column">
+                      <Radio value="todo">Todo</Radio>
+                      <Radio value="in-progress">In-Progress</Radio>
+                      <Radio value="done">Done</Radio>
+                    </Stack>
+                  </RadioGroup>
+                  <CheckboxGroup
+                    value={checkBox}
+                    onChange={(value) => {
+                      setCheckBox(value);
+                    }}
+                  >
+                    <FormLabel>Select Task Tags</FormLabel>
+                    <Stack spacing={[1, 5]} direction="column">
+                      <Checkbox value="Official">Official</Checkbox>
+                      <Checkbox value="Personal">Personal</Checkbox>
+                      <Checkbox value="Others">Others</Checkbox>
+                    </Stack>
+                  </CheckboxGroup>
+                  <FormLabel>Add Sub Task</FormLabel>
+                  <Input
+                    type="text"
+                    value={subTask1}
+                    onChange={(e) => {
+                      setSubTask1(e.target.value);
+                    }}
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} onClick={onClose}>
+                    Close
+                  </Button>
+                  <Button variant="ghost" type="submit">
+                    Create
+                  </Button>
+                </ModalFooter>
+              </form>
+            </ModalContent>
+          </Modal>
+        </Box>
       </Flex>
     </Box>
   );
