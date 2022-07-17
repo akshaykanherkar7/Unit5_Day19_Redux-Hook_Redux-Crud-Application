@@ -1,40 +1,61 @@
-import React from "react";
-import { Box, Stack, Text, Badge, Heading } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  Box,
+  Stack,
+  Text,
+  Badge,
+  Heading,
+  CheckboxGroup,
+  Flex,
+  Checkbox,
+} from "@chakra-ui/react";
+
+import { EditIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 
 const TaskCard = ({
+  id,
   title,
   description,
   tags,
-  subtasks,
+  subTasks,
   colorScheme = "green",
 }) => {
+  const [checkbox, setCheckbox] = useState();
   return (
-    <Box>
-      <Text>{title}</Text>
+    <Box border="1px solid  red" width={"230px"} padding="10px" margin="auto">
+      <Flex justifyContent={"space-between"}>
+        <Text>{title}</Text>
+        <Link to={`/task/${id}`}>
+          <EditIcon></EditIcon>
+        </Link>
+      </Flex>
       <Box>
-        <Stack>
+        <Stack direction={"row"}>
           {tags.length &&
             tags.map((item, index) => {
               return (
                 <Badge key={index} colorScheme={colorScheme}>
-                  Default
+                  {item}
                 </Badge>
               );
             })}
         </Stack>
       </Box>
       <Text>{description}</Text>
-      <Stack>
+      <Box>
         <Heading size="sm">SubTasks</Heading>
-        {subtasks.length > 0 &&
-          subtasks?.map((item, index) => {
-            return (
-              <Box key={index}>
-                <Text>{item.subTaskTitle}</Text>
-              </Box>
-            );
-          })}
-      </Stack>
+        <CheckboxGroup value={checkbox}>
+          {subTasks.length &&
+            subTasks.map((item, index) => {
+              return (
+                <Checkbox key={index} size="md" value={item.subTaskTitle}>
+                  {item.subTaskTitle}
+                </Checkbox>
+              );
+            })}
+        </CheckboxGroup>
+      </Box>
     </Box>
   );
 };
