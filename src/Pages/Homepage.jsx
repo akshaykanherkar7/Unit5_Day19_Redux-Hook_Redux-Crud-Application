@@ -4,6 +4,7 @@ import { Box, Flex, Text } from "@chakra-ui/react";
 import { getTasks } from "../Redux/AppReducer/app.action";
 import TaskCard from "../Components/TaskCard";
 import { useSearchParams } from "react-router-dom";
+import { userDetail } from "../Redux/AuthReducer/auth.action";
 
 const Homepage = () => {
   const [searchParams] = useSearchParams();
@@ -18,6 +19,12 @@ const Homepage = () => {
       getTaskHandler();
     }
   }, [getTaskHandler, tasks.length]);
+
+  // useEffect(() => {
+  //   dispatch(userDetail("masai-school")).then((res) => {
+  //     console.log("res:", res);
+  //   });
+  // }, []);
 
   const filterByParamTags = (task) => {
     const paramsTags = searchParams.getAll("tags");

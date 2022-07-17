@@ -15,7 +15,6 @@ export const reducer = (state = initialState, { type, payload }) => {
     }
 
     case types.REGISTER_SUCCESS: {
-
       return { ...state, isLoading: false };
     }
 
@@ -28,7 +27,7 @@ export const reducer = (state = initialState, { type, payload }) => {
     }
 
     case types.LOGIN_SUCESS: {
-        saveLocalData("token",payload)
+      saveLocalData("token", payload);
       return { ...state, isLoading: false, isAuth: true, token: payload };
     }
 
@@ -40,6 +39,11 @@ export const reducer = (state = initialState, { type, payload }) => {
         isAuth: false,
         token: "",
       };
+    }
+
+    case types.LOGOUT: {
+      localStorage.removeItem("token");
+      return { ...state, isAuth: false, token: "" };
     }
 
     default: {

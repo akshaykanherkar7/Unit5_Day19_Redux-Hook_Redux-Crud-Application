@@ -21,10 +21,23 @@ export const login = (params) => (dispatch) => {
     .post("http://masai-api-mocker.herokuapp.com/auth/login", params)
     .then((res) => {
       dispatch({ type: types.LOGIN_SUCESS, payload: res.data.token });
+      console.log("RES", res);
       return types.LOGIN_SUCESS;
     })
     .catch((e) => {
       dispatch({ type: types.LOGIN_FAILED, payload: e });
       return types.LOGIN_FAILED;
     });
+};
+
+export const userDetail = (username) => (dispatch) => {
+  return axios
+    .get(`http://masai-api-mocker.herokuapp.com//user/${username}`)
+    .then((res) => {
+      dispatch({ tye: types.USER_DETAIL, payload: res.data });
+    });
+};
+
+export const LogOutAPI = () => (dispatch) => {
+  dispatch({ type: types.LOGOUT });
 };
